@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[requires]
+python_version     = "3.9"
+
+[packages]
+beautifulsoup4     = "*"
+lxml               = "*"
+pip                = "*"
+pipenv             = "*"
+PyMySQL            = "*"
+python-dotenv      = "*"
+requests           = "*"
+selenium           = "*"
+virtualenv         = "*"
+webdriver-manager  = "*"
+
+[dev-packages]
+
+
