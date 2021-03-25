@@ -1,0 +1,834 @@
+swagger: '2.0'
+info:
+  title: Uniqlo Fast Retailing Store Management System API Specifications
+  description: "This is the complete specification of Uniqlo (Fast Retailing)  Store Management System. Please note that this document covers API version 200 only which is an old version and may not be available in production environment at the moment.\nBased on API specification document Ed 10, avaiable at \nhttps://yumemi.sharepoint.com/projects/20012062700/_layouts/15/WopiFrame.aspx?sourcedoc={188D74A2-7D7B-4229-90D0-60F0823AA645}&file=StoreManagementSystemAPISpecification.docx&action=default"
+  termsOfService: Please check Uniqlo terms of service avaiable at uniqlo.com prior to using this API.
+  version: '200'
+  contact:
+    name: Yumemi Corporation
+    url: www.yumemi.co.jp
+    email: info@yumemi.co.jp
+  license:
+    name: proprietry Uniqlo license
+    url: www.uniqlo.com/licenses/api-license
+host: store.fastretailing.com
+schemes:
+  - http
+basePath: /api
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  '/{locale}/{brand}/{version}/getStoreList.json':
+    get:
+      summary: Store List
+      description: >
+        The endpoint returns a complete list of stores against the
+        parameters         provided. The response includes the store ID alongwith
+        operational details about the store.
+      parameters:
+        - name: locale
+          in: path
+          description: A two letter code representing the country name
+          required: true
+          type: string
+          enum:
+            - JP
+            - GB
+            - US
+            - CN
+            - DE
+            - SG
+            - HK
+            - TH
+            - FR
+            - KR
+            - PH
+            - ID
+            - MY
+        - name: brand
+          in: path
+          description: Brand code for which chirashi is to be retrieved
+          required: true
+          type: string
+          enum:
+            - uniqlo
+            - gu
+        - name: version
+          in: path
+          description: A number representing the API revision to be used
+          required: true
+          type: integer
+          enum:
+            - 100
+        - name: r
+          in: query
+          description: 'A string representing the origin of the current request, generally known as referrer (connection source)'
+          required: true
+          type: string
+          enum:
+            - test
+            - browser
+            - mobileapp
+            - smartphone
+            - tablet
+        - name: lat
+          in: query
+          description: Latitude. (-90.0 - 90.0)
+          required: false
+          type: string
+        - name: lon
+          in: query
+          description: Longnitude. (-180.0 - 180.0)
+          required: false
+          type: string
+        - name: keyword
+          in: query
+          description: "A keyword for fulltext search.\n\nThis value must be url-encoded.\n\n(Search Target: store name, address, train access) \n"
+          required: false
+          type: string
+        - name: area1_code
+          in: query
+          description: "Specifies the code of prefecture/state. \n\nSee Appendix 3.1 area code list.\n\nSorted by Latitude Descending order from requested area1_code.\n"
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: >
+            Determine the maximum number of stores returned from one request.The
+            limitation is 100.
+
+
+
+            The default is 100.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: Determine offset for the request.Default is 0.
+          required: false
+          type: integer
+        - name: sort
+          in: query
+          description: >
+            Parameters used for sorting.
+
+            You can specify store_name or address or lat or lon, and sort
+            order(“+” for ascendant, “-” for decendant).
+
+
+
+            Example : “-address” (Decendant by address).
+
+
+
+            You can specify only one sort parameter.
+
+            Default is “+store_name”.
+
+
+
+            If you request “lat” and “lon”, the response will be sorted by the
+            distance from requested “lat” and “lon”.
+          required: false
+          type: string
+        - name: store_type_code
+          in: query
+          description: |
+            Specifies store type.
+
+            1000: normal
+
+            1001: large
+
+            1005: extra large
+          required: false
+          type: string
+          enum:
+            - 1000
+            - 1001
+            - 1005
+        - name: store_id
+          in: query
+          description: >
+            International store ID (8 digit), G1 IMS StoreID 4 (Max 4 digit) or
+            G1 IMS StoreID 6 ( 6 digit).
+
+
+
+            Specify multiple Allowed separated by commas.
+          required: false
+          type: string
+        - name: include_closed
+          in: query
+          description: |
+            Either include or exclude a closed store.
+
+            0 : exclude closed store. (Default)
+          required: false
+          type: integer
+        - name: store_item_code
+          in: query
+          description: |
+            Specifies store items available (for filtering):
+
+              10001: Baby
+
+              10002: Kids
+
+              10003: Women
+
+              10004: Men
+
+            Specify multiple allowed separated by commas
+          required: false
+          type: string
+      tags:
+        - Store List
+      responses:
+        '200':
+          description: An object containing the metadata related to the results alongwith a list of stores.
+          examples:
+            application/json: |
+              {
+                "message":"",
+                "result":
+                  {
+                    "brand_code":"UNIQLO",
+                    "total_count":853,
+                    "stores":
+                      [
+                        {
+                          "store_id":10101525,
+                          "store_name":"UNIQLO OSAKA",
+                          "country_name_short":"JP",
+                          "area0_code":6,
+                          "area0_name":
+                          "\u95a2\u897f",
+                          "area1_code":26,
+                          "area1_name":"\u5927\u962a\u5e9c",
+                          "municipality":"\u5927\u962a\u5e02\u5317\u533a",
+                          "number":"\u8336\u5c4b\u753a1\u756a32",
+                          "building":"",
+                          "phone":"06-6292-8280",
+                          "wd_open_at":"11:00:00",
+                          "wd_close_at":"21:00:00",
+                          "we_open_at":"11:00:00",
+                          "we_close_at":"21:00:00",
+                          "store_url":"http:\/\/www.uniqlo.com\/jp\/shop\/info\/#10101525",
+                          "open_hours":"",
+                          "store_holiday":"",
+                          "kids_flag":1,
+                          "baby_flag":1,
+                          "g1_ims_store_id_4":"1525",
+                          "g1_ims_store_id_6":"107844",
+                          "g1_ims_store_id_13":"S1001001525",
+                          "regional_recruit_flg":1,
+                          "regional_recruit_link_url":"http:\/\/www.fastretailing.com\/employment\/career\/jp\/uniqlo\/?shop=1525",
+                          "recruit_flg":1,
+                          "recruit_link_url":"https:\/\/uniqlo-staff.jp\/jobfind-pc\/job\/All\/2424",
+                          "lat":"34.7054426",
+                          "lon":"135.4992551",
+                          "store_type_code":1005,
+                          "floor_map_flg":0,
+                          "inventory_flg":1
+                        },
+                        {
+                          "store_id":10101267,
+                          "store_name":"\u30a4\u30aa\u30f3\u30bf\u30a6\u30f3\u5f66\u6839\u5e97",
+                          "country_name_short":"JP",
+                          "area0_code":6,
+                          "area0_name":"\u95a2\u897f",
+                          "area1_code":25,
+                          "area1_name":"\u6ecb\u8cc0\u770c",
+                          "municipality":"\u5f66\u6839\u5e02",
+                          "number":"\u91cc\u6839\u753a24",
+                          "building":"",
+                          "phone":"0749-21-4377",
+                          "wd_open_at":"11:00:00",
+                          "wd_close_at":"20:00:00",
+                          "we_open_at":"10:00:00",
+                          "we_close_at":"20:00:00",
+                          "store_url":"http:\/\/www.uniqlo.com\/jp\/shop\/info\/#10101267",
+                          "open_hours":"",
+                          "store_holiday":"",
+                          "kids_flag":1,
+                          "baby_flag":1,
+                          "g1_ims_store_id_4":"1267",
+                          "g1_ims_store_id_6":"101228",
+                          "g1_ims_store_id_13":"S1001001267",
+                          "regional_recruit_flg":1,
+                          "regional_recruit_link_url":"http:\/\/www.fastretailing.com\/employment\/career\/jp\/uniqlo\/?shop=1267",
+                          "recruit_flg":1,
+                          "recruit_link_url":"https:\/\/uniqlo-staff.jp\/jobfind-pc\/job\/All\/855",
+                          "lat":"35.26982616",
+                          "lon":"136.2674808",
+                          "store_type_code":1000,
+                          "floor_map_flg":0,
+                          "inventory_flg":1
+                        }
+                      ]
+                    }
+                }
+            schema: null
+            type: object
+            $ref: '#/definitions/StoreList'
+        default:
+          description: Unexpected error
+          schema:
+            type: object
+            $ref: '#/definitions/Error'
+  '/{locale}/{brand}/{version}/getStoreDetail.json':
+    get:
+      summary: Store Detail
+      description: >
+        The endpoint returns an object containing complete details about the
+        specific store.
+      parameters:
+        - name: locale
+          in: path
+          description: A two letter code representing the country name
+          required: true
+          type: string
+          enum:
+            - JP
+            - GB
+            - US
+            - CN
+            - DE
+            - SG
+            - HK
+            - TH
+            - FR
+            - KR
+            - PH
+            - ID
+            - MY
+        - name: brand
+          in: path
+          description: Brand code for which chirashi is to be retrieved
+          required: true
+          type: string
+          enum:
+            - uniqlo
+            - gu
+        - name: version
+          in: path
+          description: A number representing the API revision to be used
+          required: true
+          type: integer
+          enum:
+            - 100
+        - name: r
+          in: query
+          description: 'A string representing the origin of the current request, generally known as referrer (connection source)'
+          required: true
+          type: string
+          enum:
+            - browser
+            - mobileapp
+            - smartphone
+            - tablet
+        - name: store_id
+          in: query
+          description: >
+            International store ID (8 digit), G1 IMS StoreID 4 (Max 4 digit) or
+            G1 IMS StoreID 6 ( 6 digit).
+
+
+
+            Specify multiple Allowed separated by commas.
+          required: true
+          type: string
+        - name: include_closed
+          in: query
+          description: |
+            Either include or exclude a closed store.
+
+              0 : exclude closed store. (Default)
+
+              1 : include closed store.
+          required: false
+          type: integer
+          enum:
+            - 0
+            - 1
+      tags:
+        - Store Detail
+      responses:
+        '200':
+          description: An object containing the metadata related to the result alongwith the store details.
+          examples:
+            application/json: |
+              {
+                "message":"",
+                "result":
+                  {
+                    "brand_code":"UNIQLO",
+                    "store_id":10100914,
+                    "area0_code":4,
+                    "area1_code":18,
+                    "open_date":"",
+                    "store_name":"\u30e6\u30cb\u30af\u30ed BIGBOX\u9ad8\u7530\u99ac\u5834\u5e97",
+                    "store_name_phonogram":"\u30d3\u30c3\u30b0\u30dc\u30c3\u30af\u30b9\u30bf\u30ab\u30c0\u30ce\u30d0\u30d0\u30c6\u30f3",
+                    "country_name_short":"JP",
+                    "postcode":"1690075",
+                    "area0_name":"\u95a2\u6771",
+                    "area1_name":"\u6771\u4eac\u90fd",
+                    "municipality":"\u65b0\u5bbf\u533a",
+                    "number":"\u9ad8\u7530\u99ac\u58341-35-3 BIGBOX 2\u968e",
+                    "building":"",
+                    "address":"\u6771\u4eac\u90fd\u65b0\u5bbf\u533a\u9ad8\u7530\u99ac\u58341-35-3 BIGBOX 2\u968e",
+                    "address_phonogram":"\u30c8\u30a6\u30ad\u30e7\u30a6\u30c8\u30b7\u30f3\u30b8\u30e5\u30af\u30af\u30bf\u30ab\u30c0\u30ce\u30d0\u30d0",
+                    "phone":"03-6233-0263",
+                    "fax":"",
+                    "car_access":"",
+                    "bus_access":"",
+                    "train_access":"\u897f\u6b66\u65b0\u5bbf\u7dda\u30fbJR\u5c71\u624b\u7dda\u30fb\u6771\u4eac\u30e1\u30c8\u30ed\u6771\u897f\u7dda\u300c\u9ad8\u7530\u99ac\u5834\u300d\u4e0b\u8eca\u3001\u99c5\u524dBIGBOX2\u968e",
+                    "wd_open_at":"10:00:00",
+                    "wd_close_at":"21:00:00",
+                    "we_open_at":"10:00:00",
+                    "we_close_at":"20:00:00",
+                    "open_hours":"\u203b\u4f46\u3057\u3001\u571f\u66dc\u65e5\u306f10:00\uff5e21:00\u3001\u6bce\u9031\u65e5\u66dc\u65e5\u30fb\u795d\u65e5\u306f10:00\uff5e20:00\u3068\u306a\u308a\u307e\u3059\u3002",
+                    "store_holiday":"",
+                    "store_url":"http:\/\/www.uniqlo.com\/jp\/shop\/info\/#10100914",
+                    "comment1":"",
+                    "comment2":"",
+                    "comment3":"\u30d1\u30f3\u30c4\u306e\u88fe\u4e0a\u3052\u30b5\u30fc\u30d3\u30b9\u3042\u308a\u3002",
+                    "announcement":"",
+                    "parking_flag":0,
+                    "parking_max":0,
+                    "parking_comment":"\u203b\u3053\u3061\u3089\u306e\u5e97\u8217\u306b\u99d0\u8eca\u5834\u306f\u3054\u3056\u3044\u307e\u305b\u3093\u306e\u3067\u3001\u5404\u516c\u5171\u4ea4\u901a\u6a5f\u95a2\u3092\u3054\u5229\u7528\u304f\u3060\u3055\u3044\u3002",
+                    "parking_coupon_flag":0,
+                    "new_flag":0,
+                    "refit_flag":0,
+                    "kids_flag":0,
+                    "baby_flag":0,
+                    "chirashi_image_url":"",
+                    "chirashi_link_target":"",
+                    "chirashi_text":"",
+                    "my_store_flag":0,
+                    "g1_ims_store_id_4":"914",
+                    "g1_ims_store_id_6":"101184",
+                    "g1_ims_store_id_13":"S1001000914",
+                    "regional_recruit_flg":0,
+                    "regional_recruit_link_url":"",
+                    "recruit_flg":1,
+                    "recruit_link_url":"https:\/\/uniqlo-staff.jp\/jobfind-pc\/job\/All\/2532",
+                    "lat":"35.71273062",
+                    "lon":"139.7043479",
+                    "store_type_code":1000,
+                    "floor_map_flg":0,
+                    "inventory_flg":1
+                  }
+                }
+            schema:
+            type: object
+            $ref: '#/definitions/StoreDetail'
+        '400':
+          description: Invalid parameter is specified
+          examples:
+            application/json: |-
+              {
+                "message" : "Invalid brand code",
+                "result" : [ ]
+              }
+        default:
+          description: Unexpected error
+          schema:
+            type: object
+            $ref: '#/definitions/Error'
+definitions:
+  StoreList:
+    type: object
+    properties:
+      message:
+        type: string
+        description: A message related to the current request.
+      result:
+        type: object
+        description: An object containg the complete result set.
+        $ref: '#/definitions/ListResult'
+  ListResult:
+    type: object
+    properties:
+      brand_code:
+        type: string
+        description: Brand code for the resturned store list
+      total_count:
+        type: integer
+        description: >
+          Total number of stores found for the specified paramaters.
+
+
+
+          Please note that this is just a count and NOT all found stores are
+          returned in the list.
+      stores:
+        type: array
+        description: An array containing details of found stores with an upper limit of 100.
+        items:
+          $ref: '#/definitions/Stores'
+  Stores:
+    type: object
+    properties:
+      store_id:
+        type: integer
+        description: International store ID
+        example: 10199901
+      store_name:
+        type: string
+        description: Store name
+        example: ユニクロ ゆめシティ新下関店
+      country_name_short:
+        type: string
+        description: Short name of country
+        example: JP
+      area0_code:
+        type: integer
+        description: Area code for region
+        example: 8
+      area0_name:
+        type: string
+        description: Area name for region
+        example: 中国
+      area1_code:
+        type: integer
+        description: 'Area code for district(state, prefecture, province)'
+        example: 35
+      area1_name:
+        type: string
+        description: 'Area name for district(state, prefecture, province)'
+        example: 山口県
+      municipality:
+        type: string
+        description: Name of municupality
+        example: 下関市
+      number:
+        type: string
+        description: Address number
+        example: 伊倉新町3-1
+      building:
+        type: string
+        description: Building name and floor.
+        example: ゆめシティ新下関3階
+      phone:
+        type: string
+        description: Phone number
+        example: 083-251-1007
+      wd_open_at:
+        type: string
+        description: Weekday opening time
+        example: 36000
+      wd_close_at:
+        type: string
+        description: Weekday closing time
+        example: 75600
+      we_open_at:
+        type: string
+        description: Weekend and holiday opening time
+        example: 36000
+      we_close_at:
+        type: string
+        description: Weekend and holiday closing time
+        example: 75600
+      store_url:
+        type: string
+        description: Store URL
+        example: 'http://www.uniqlo.com/jp/shop/info/#10103114'
+      open_hours:
+        type: string
+        description: Irregular opening hours
+        example: ''
+      store_holiday:
+        type: string
+        description: Regular holiday
+        example: 9/15（火）〜9/17（木）
+      kids_flag:
+        type: integer
+        description: 'Whether this store has items for kids. (0: no, 1: yes)'
+        example: 1
+      baby_flag:
+        type: integer
+        description: 'Whether this store has items for babies. (0: no, 1: yes)'
+        example: 1
+      g1_ims_store_id_4:
+        type: string
+        description: IMS Store ID (4digit)
+        example: 3114
+      g1_ims_store_id_6:
+        type: string
+        description: IMS Store ID (6digit)
+        example: 101903
+      g1_ims_store_id_13:
+        type: string
+        description: IMS Store ID (13digit)
+        example: S1001003114
+      regional_recruit_flg:
+        type: integer
+        description: 'Link flag regional regular employment. (0: no, 1: yes)'
+        example: 1
+      recruit_link_url:
+        type: string
+        description: URL of regional regular employment community.
+        example: 'http://www.fastretailing.com/employment/career/jp/uniqlo/?shop=1525'
+      lat:
+        type: string
+        description: Latitude(World Geodetic System)
+        example: '34.0066536'
+      lon:
+        type: string
+        description: Longitude(World Geodetic System)
+        example: '130.9333661'
+      store_type_code:
+        type: integer
+        description: 'Store type (1000: normal, 1001: large, 1005: extra large)'
+        example: 1000
+      floor_map_flg:
+        type: integer
+        description: 'A flag to indicate if floor map of the store is available online. (0: no, 1: yes)'
+        example: 1
+      inventory_flg:
+        type: integer
+        description: 'Flag to indicate if store inventory can be checked online. (0: no, 1: yes)'
+        example: 1
+
+  StoreDetail:
+    type: object
+    properties:
+      message:
+        type: string
+        description: A message related to the current request.
+      result:
+        type: object
+        description: An object containg the complete result set.
+        $ref: '#/definitions/DetailResult'
+  DetailResult:
+    type: object
+    properties:
+      brand_code:
+        type: string
+        description: Brand code for the selected store
+        example: UNIQLO
+      store_id:
+        type: integer
+        description: International store ID
+        example: 10101266
+      area0_code:
+        type: integer
+        description: Area code for region
+        example: 4
+      area1_code:
+        type: integer
+        description: 'Area code for district(state, prefecture, province)'
+        example: 18
+      open_date:
+        type: string
+        description: Store opening date
+        example: '2014-01-01T00:00:00.000Z'
+      store_name:
+        type: string
+        description: Store name
+        example: ユニクロ アトレ大井町店
+      store_name_phonogram:
+        type: string
+        description: Store name in phonogram
+        example: アトレオオイマチテン
+      country_name_short:
+        type: string
+        description: Short name of country
+        example: JP
+      postcode:
+        type: string
+        description: Zip code for country
+        example: 1400014
+      area0_name:
+        type: string
+        description: Area name for region
+        example: 関東
+      area1_name:
+        type: string
+        description: 'Area name for district(state, prefecture, province)'
+        example: 東京都
+      municipality:
+        type: string
+        description: Name of municupality
+        example: 品川区
+      number:
+        type: string
+        description: Address number
+        example: 大井1-2-1
+      building:
+        type: string
+        description: Building name and floor.
+        example: アトレ大井町4階
+      address:
+        type: string
+        description: Address for search.
+        example: 東京都品川区大井1-2-1 アトレ大井町4階
+      address_phonogram:
+        type: string
+        description: Address for search in phonogram.
+        example: トウキョウトシナガワクオオイ
+      phone:
+        type: string
+        description: Phone number
+        example: 03-5709-7263
+      fax:
+        type: string
+        description: FAX number
+        example: 03-5709-7263
+      car_access:
+        type: string
+        description: Car access information
+        example: ''
+      bus_access:
+        type: string
+        description: Bus access information
+        example: ''
+      train_access:
+        type: string
+        description: Train access information
+        example: JR京浜東北線、東急大井町線、「大井町」駅下車、中央口より徒歩1分
+      wd_open_at:
+        type: string
+        description: Weekday opening time
+        example: 36000
+      wd_close_at:
+        type: string
+        description: Weekday closing time
+        example: 75600
+      we_open_at:
+        type: string
+        description: Weekend and holiday opening time
+        example: 36000
+      we_close_at:
+        type: string
+        description: Weekend and holiday closing time
+        example: 75600
+      open_hours:
+        type: string
+        description: Irregular opening hours
+        example: ''
+      store_holiday:
+        type: string
+        description: Regular holiday
+        example: ''
+      store_url:
+        type: string
+        description: Store URL
+        example: 'http://www.uniqlo.com/jp/shop/info/#10101266'
+      comment1:
+        type: string
+        description: Store comment
+        example: ''
+      comment2:
+        type: string
+        description: Store comment
+        example: ''
+      comment3:
+        type: string
+        description: Store comment
+        example: パンツの裾上げサービスあり。
+      announcement:
+        type: string
+        description: Announcement text
+        example: 免税（TAX　FREE）対応中。
+      parking_flg:
+        type: integer
+        description: 'Whether this store has a parking space. (0: no, 1: yes)'
+        example: 1
+      parking_max:
+        type: integer
+        description: Max capacity of the parking space.
+        example: 0
+      parking_comment:
+        type: string
+        description: Comments on the parking space.
+        example: 50台　※1000円以上で1時間、5000円以上で5時間無料。すべて税込価格となります。
+      parking_coupon_flag:
+        type: integer
+        description: 'Wheter this store has a parking coupon. (0: no, 1: yes)'
+        example: 1
+      new_flag:
+        type: integer
+        description: 'Wheter this store is newly opened. (0: no, 1: yes)'
+        example: 1
+      refit_flag:
+        type: integer
+        description: 'Store is refit. (0: no, 1: yes)'
+        example: 1
+      kids_flag:
+        type: integer
+        description: 'Whether this store has items for kids. (0: no, 1: yes)'
+        example: 1
+      baby_flag:
+        type: integer
+        description: 'Whether this store has items for babies. (0: no, 1: yes)'
+        example: 1
+      chirashi_image_url:
+        type: string
+        description: Flier image URL
+        example: ''
+      chirashi_link_target:
+        type: string
+        description: Flier link target
+        example: ''
+      chirashi_text:
+        type: string
+        description: Text for fliers
+        example: ''
+      my_store_flag:
+        type: integer
+        description: 'Whether “my store news” is available for this store. (0: no, 1: yes)'
+        example: 1
+      g1_ims_store_id_4:
+        type: string
+        description: IMS Store ID (4digit)
+        example: 3114
+      g1_ims_store_id_6:
+        type: string
+        description: IMS Store ID (6digit)
+        example: 101903
+      g1_ims_store_id_13:
+        type: string
+        description: IMS Store ID (13digit)
+        example: S1001003114
+      regional_recruit_flg:
+        type: integer
+        description: 'Link flag regional regular employment. (0: no, 1: yes)'
+        example: 1
+      recruit_link_url:
+        type: string
+        description: URL of regional regular employment community.
+        example: 'http://www.fastretailing.com/employment/career/jp/uniqlo/?shop=1525'
+      lat:
+        type: string
+        description: Latitude(World Geodetic System)
+        example: '34.0066536'
+      lon:
+        type: string
+        description: Longitude(World Geodetic System)
+        example: '130.9333661'
+      store_type_code:
+        type: integer
+        description: 'Store type (1000: normal, 1001: large, 1005: extra large)'
+        example: 1000
+      floor_map_flg:
+        type: integer
+        description: 'A flag to indicate if floor map of the store is available online. (0: no, 1: yes)'
+        example: 1
+      inventory_flg:
+        type: integer
+        description: 'Flag to indicate if store inventory can be checked online. (0: no, 1: yes)'
+        example: 1
+  Error:
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
