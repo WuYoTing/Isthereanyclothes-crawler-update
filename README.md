@@ -26,3 +26,23 @@ TG_TO=""                 //Telegram Recever Id
 
 3. Run isthereanyclothes_crawler.py
 
+## offical api analysis
+
+| offical           | local                   |  
+| ----------------- |:----------------------- |
+| l1GoodsCd         | prod number             |
+| goodsNm           | prod name               |
+|                   | sex                     |
+| dtlExp            | about                   | 
+| materialInfo      | material                |
+| termLimitSalesEndMsg| limited_price_date      |
+|                   | category                |
+| dispL2GoodsKey    | main_image_url          |
+| fixed format      | size_url                | 
+| newFlg            | is_new_good             |
+| onlineLimitFlg    | is_online_only          |
+| specialSizeFlg(?) | is_set                  | 
+| termLimitSalesEndMsg   | is_limited_time         |
+| discountFlg       | is_price_down           |
+| Share & Publish   | can_modify              |
+

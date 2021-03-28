@@ -8,18 +8,16 @@ from datetime import date
 
 def prod_main():
     today_date = str(date.today())
-    driver = create_driver_instance()
     # Gu
     gu_start_time = time.time()
-    get_gu_prod(driver)
+    get_gu_prod()
     gu_end_time = time.time()
     gu_total_time = gu_end_time - gu_start_time
     # Uniqlo
     uniqlo_start_time = time.time()
-    get_uniqlo_prod(driver)
+    #get_uniqlo_prod()
     uniqlo_end_time = time.time()
     uniqlo_total_time = uniqlo_end_time - uniqlo_start_time
-    driver.close()
     # gu total time
     gu_prod_time = round(gu_total_time, 2)
     m, s = divmod(gu_prod_time, 60)

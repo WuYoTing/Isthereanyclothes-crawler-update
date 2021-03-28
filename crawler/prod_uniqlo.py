@@ -58,7 +58,7 @@ def get_uniqlo_prod(driver):
     for prod_url in man_prod_url_set.copy():
         print(str(len(man_prod_url_set)) + ' items left for man in uniqlo')
         try:
-            get_prod_info(prod_url, driver, 'uniqlo_clothes')
+            get_prod_info(prod_url, 'uniqlo', 'man')
         except Exception as Ec:
             exception_format(Ec, prod_url)
         else:
@@ -67,7 +67,7 @@ def get_uniqlo_prod(driver):
     for prod_url in woman_prod_url_set.copy():
         print(str(len(woman_prod_url_set)) + ' items left for woman in uniqlo')
         try:
-            get_prod_info(prod_url, driver, 'uniqlo_clothes')
+            get_prod_info(prod_url, 'uniqlo', 'woman')
         except Exception as Ec:
             exception_format(Ec, prod_url)
         else:
